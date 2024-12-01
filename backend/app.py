@@ -7,7 +7,7 @@ import os
 app = Flask(__name__, static_folder='../frontend/static', template_folder='../frontend')  # Set static folder for CSS/JS and template folder for HTML
 
 # Enable CORS for all routes
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 # Configure SQLite database
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
@@ -102,4 +102,4 @@ def serve_static(filename):
 
 # Run the server
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host="0.0.0.0", port=5001)

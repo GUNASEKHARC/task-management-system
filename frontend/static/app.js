@@ -3,6 +3,8 @@ let tasks = [];  // Store tasks locally
 let sortState = { column: 'id', ascending: true };  // Track sorting column and order
 let filteredTasks = []; // Track filtered tasks (for filtering and search)
 
+const apiUrl = window.location.hostname === 'localhost' ? 'http://127.0.0.1:5001' : 'https://task-management-system-jpug.onrender.com';  // Dynamic API URL
+
 async function handleFormSubmit(event) {
     event.preventDefault();
 
@@ -32,7 +34,7 @@ async function handleFormSubmit(event) {
 
 async function createTask(taskData) {
     try {
-        const response = await fetch('http://127.0.0.1:5000/tasks', {
+        const response = await fetch(`${apiUrl}/tasks`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(taskData)
@@ -46,7 +48,7 @@ async function createTask(taskData) {
 
 async function updateTask(taskId, taskData) {
     try {
-        const response = await fetch(`http://127.0.0.1:5000/tasks/${taskId}`, {
+        const response = await fetch(`${apiUrl}/tasks/${taskId}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(taskData)
@@ -68,7 +70,7 @@ function populateEditForm(task) {
 
 async function loadTasks() {
     try {
-        const response = await fetch('http://127.0.0.1:5000/tasks');
+        const response = await fetch(`${apiUrl}/tasks`);
         tasks = await response.json();
         filteredTasks = [...tasks]; // Update filteredTasks with the full list initially
         sortTasks(sortState.column); // Sort tasks after loading
@@ -139,7 +141,7 @@ function searchTasks() {
 
 async function deleteTask(taskId) {
     try {
-        const response = await fetch(`http://127.0.0.1:5000/tasks/${taskId}`, {
+        const response = await fetch(`${apiUrl}/tasks/${taskId}`, {
             method: 'DELETE'
         });
         const result = await response.json();
