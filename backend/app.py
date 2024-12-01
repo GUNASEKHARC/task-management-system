@@ -1,9 +1,10 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS  # Import Flask-CORS
+import os
 
 # Initialize Flask app
-app = Flask(__name__)
+app = Flask(__name__, static_folder='frontend')
 
 # Enable CORS for all routes
 CORS(app)
@@ -26,6 +27,11 @@ class Task(db.Model):
 # Create the database
 with app.app_context():
     db.create_all()
+
+# Route for the homepage
+@app.route('/')
+def index():
+    return send_from_directory(os.path.join(app.root_path, 'frontend'), 'index.html')
 
 # Routes for CRUD operations
 @app.route('/tasks', methods=['GET'])
@@ -52,7 +58,6 @@ def create_task():
     db.session.commit()
     return jsonify({"message": "Task created successfully!"}), 201
 
-
 @app.route('/tasks/<int:task_id>', methods=['GET'])
 def get_task(task_id):
     task = Task.query.get(task_id)
@@ -65,7 +70,6 @@ def get_task(task_id):
             "status": task.status
         })
     return jsonify({"error": "Task not found!"}), 404
-
 
 @app.route('/tasks/<int:task_id>', methods=['PUT'])
 def update_task(task_id):
