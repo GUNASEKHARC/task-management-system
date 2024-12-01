@@ -4,7 +4,7 @@ from flask_cors import CORS  # Import Flask-CORS
 import os
 
 # Initialize Flask app
-app = Flask(__name__, static_folder='frontend', template_folder='frontend')  # Set static and template folder
+app = Flask(__name__, static_folder='../frontend/static', template_folder='../frontend')  # Set static folder for CSS/JS and template folder for HTML
 
 # Enable CORS for all routes
 CORS(app)
@@ -31,7 +31,7 @@ with app.app_context():
 # Route for the homepage (index.html)
 @app.route('/')
 def index():
-    return send_from_directory(os.path.join(app.root_path, 'frontend'), 'index.html')
+    return send_from_directory(os.path.join(app.root_path, '../frontend'), 'index.html')  # Serve index.html from the frontend folder
 
 # Routes for CRUD operations
 @app.route('/tasks', methods=['GET'])
@@ -94,7 +94,11 @@ def delete_task(task_id):
     db.session.delete(task)
     db.session.commit()
     return jsonify({"message": "Task deleted successfully!"})
-    
+
+# Serve static files (CSS, JS, etc.)
+@app.route('/static/<path:filename>')
+def serve_static(filename):
+    return send_from_directory(os.path.join(app.root_path, '../frontend/static'), filename)
 
 # Run the server
 if __name__ == '__main__':
