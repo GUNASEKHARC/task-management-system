@@ -4,7 +4,7 @@ from flask_cors import CORS  # Import Flask-CORS
 import os
 
 # Initialize Flask app
-app = Flask(__name__, static_folder='frontend')
+app = Flask(__name__, static_folder='frontend', template_folder='frontend')  # Set static and template folder
 
 # Enable CORS for all routes
 CORS(app)
@@ -28,7 +28,7 @@ class Task(db.Model):
 with app.app_context():
     db.create_all()
 
-# Route for the homepage
+# Route for the homepage (index.html)
 @app.route('/')
 def index():
     return send_from_directory(os.path.join(app.root_path, 'frontend'), 'index.html')
