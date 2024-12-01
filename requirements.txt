@@ -1,4 +1,4 @@
-Flask==2.3.3
+Flask==2.3.0
+gunicorn==20.1.1
 Flask-SQLAlchemy==3.0.3
-gunicorn==20.1.0
-
+sqlite3  # Optional: SQLite is built-in with Python, so you might not need this explicitly.
